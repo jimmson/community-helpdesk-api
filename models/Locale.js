@@ -8,12 +8,28 @@ const localeSchema = new mongoose.Schema({
     landing: {
         content: {
             header: {type: String, default: "Zelos Community Helpdesk"},
-            body: {type: String, default: "Zelos Community Helpdesk connects people who need help with volunteers who are willing to help others"}
+            body: {type: String, default: "Zelos Community Helpdesk connects people who need help with volunteers who are willing to help others"},
+            quote: {type: String, default: "There is no exercise better for the heart than reaching down and lifting people up."}
         },
         buttons: {
             request: {type: String, default: "I need help"},
-            offer: {type: String, default: "I want to help"}
+            offer: {type: String, default: "I want to help"},
+            more: {type: String, default: "Find out more"},
+        },
+        donate : {
+            header: {type: String, default: "DONATE"},
+            message: {type: String, default: "Help supporting the comunity by making a donation"},
         }
+    },
+    about: {
+        content: {
+            header: {type: String, default: "About us"},
+            title: {type: String, default: "We are Zelos Community"},
+            body: {type: String, default: "Zelos Community Helpdesk connects people who need help with volunteers who are willing to help others."}
+        },
+        buttons: {
+            back: {type: String, default: "Back"},
+        },
     },
     selectCategory: {
         content: {

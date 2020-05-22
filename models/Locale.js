@@ -82,7 +82,11 @@ const localeSchema = new mongoose.Schema({
     appLanding: {
         content: {
             header: {type: String, default: "Help someone in your community!"},
-            body: {type: String, default: "- Install the Zelos Team Management app by clicking the buttons below.\n- Join the workspace \"COVID-help-ESTONIA\"\n-Join groups of locations near you\n- Get notifications about people in need in your area"}
+            body: {type: String, default: "Get Zelos up and running"},
+            step1: {type: String, default: "- Install the Zelos Team Management app by clicking the buttons below.\n\n-\n- Get notifications about people in need in your area"},
+            step2: {type: String, default: "- Join the workspace \"COVID-help-ESTONIA\""},
+            step3: {type: String, default: "- Join groups of locations near you"},
+            step4: {type: String, default: "- Get notifications about people in need in your area"}
         }
     }
 }, {

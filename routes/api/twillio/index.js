@@ -11,7 +11,7 @@ twillio.post('/', async (req, res) => {
     const category = new Category();
     const cats = await category.list("public");
     const area = new Area();
-    const areas = await area.list();
+    const areas = await area.list("public");
 
     try {
         if (req.body.Digits <= cats.length && req.body.Digits > 0 ) {

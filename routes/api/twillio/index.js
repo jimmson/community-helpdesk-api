@@ -7,6 +7,7 @@ const Area = require(appRoot + '/models/Area');
 
 // Create a locale
 twillio.post('/', async (req, res) => {
+    const url = "https://covidsa.help/api/twillio";
     const twiml = new VoiceResponse();
     const category = new Category();
     const categories = await category.list("public");
@@ -25,7 +26,7 @@ twillio.post('/', async (req, res) => {
 
         if (d <= areas.length && d > 0) {
             area.id = areas[d-1]._id;
-            twiml.redirect({method: "POST"}, `http://84c158c94e71.ngrok.io/api/twillio?area=${area.id}&category=${category.id}`);
+            twiml.redirect({method: "POST"}, `${url}?area=${area.id}&category=${category.id}`);
         } else {
             twiml.say('Welcome to the Covid SA helpline');
 
@@ -39,7 +40,7 @@ twillio.post('/', async (req, res) => {
 
         if (d <= categories.length && d > 0) {
             category.id = categories[d-1]._id;
-            twiml.redirect({method: "POST"}, `http://84c158c94e71.ngrok.io/api/twillio?area=${area.id}&category=${category.id}`);
+            twiml.redirect({method: "POST"}, `${url}?area=${area.id}&category=${category.id}`);
         } else {
 
             const gather = twiml.gather({ numDigits: 1 });

@@ -9,43 +9,62 @@ const Area = require(appRoot + '/models/Area');
 twillio.post('/', async (req, res) => {
     const twiml = new VoiceResponse();
     const category = new Category();
-    const cats = await category.list("public");
+    const categories = await category.list("public");
     const area = new Area();
     const areas = await area.list("public");
 
-    try {
-        if (req.body.Digits <= cats.length && req.body.Digits > 0 ) {
-            
-            cat = cats[parseInt(req.body.Digits)-1]
+    area.id = req.query.area;
+    category.id = req.query.category;
+    
+    let a = await area.get().catch((err) => { console.error("err"); });
+    let c = await category.get().catch((err) => { console.error("err"); });
+    let d = req.body.Digits
+    
 
-            const ticket = new Ticket();
-            await ticket.add({
-                phone: req.body.From,
-                category: cat._id,
-                area: areas[0]._id,
-            });
+    if (a == null) {
 
-            twiml.say(`We have recieved your request for assistance with ${cat.name}.`);
-            twiml.say(`Expect a call from one of our volunteer soon. Bye.`);
-
+        if (d <= areas.length && d > 0) {
+            area.id = areas[d-1]._id;
+            twiml.redirect({method: "POST"}, `http://84c158c94e71.ngrok.io/api/twillio?area=${area.id}&category=${category.id}`);
         } else {
             twiml.say('Welcome to the Covid SA helpline');
 
             const gather = twiml.gather({ numDigits: 1 });
-            
-            var i = 1;
-            cats.forEach(cat => {
-                gather.say(`For assistance with ${cat.name}, press ${i}.`);
-                i++;
+            areas.forEach((a, i) => {
+                gather.say(`For assistance in ${a.name}, press ${i+1}.`);
             });
         }
-    } catch (err) {
-        handleError(err, res);
+
+    } else if (c == null) {
+
+        if (d <= categories.length && d > 0) {
+            category.id = categories[d-1]._id;
+            twiml.redirect({method: "POST"}, `http://84c158c94e71.ngrok.io/api/twillio?area=${area.id}&category=${category.id}`);
+        } else {
+
+            const gather = twiml.gather({ numDigits: 1 });
+            categories.forEach((c, i) => {
+                gather.say(`For assistance with ${c.name}, press ${i+1}.`);
+            });
+        }
+
+    } else {
+
+        const ticket = new Ticket();
+        await ticket.add({
+            phone: req.body.From,
+            category: c._id,
+            area: a._id,
+        });
+
+        twiml.say(`We have recieved your request for assistance in ${a.name}.`);
+        twiml.say(`With ${c.name}.`);
+        twiml.say(`Expect a call from one of our volunteer soon. Bye.`);
+
     }
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
-
 })
 
 module.exports = twillio;
